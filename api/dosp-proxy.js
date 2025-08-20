@@ -1,12 +1,16 @@
+import { URLSearchParams } from "url";
+
 export default async function handler(req, res) {
     // URL real do DOSP
     const targetUrl = "https://diariooficial.prefeitura.sp.gov.br/md_epubli_controlador.php?acao=materias_pesquisar";
 
-    // repassa a requisição para o site alvo
+    // transforma o body em x-www-form-urlencoded
+    const formBody = new URLSearchParams(req.body).toString();
+
     const r = await fetch(targetUrl, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: req.body
+        body: formBody
     });
 
     const text = await r.text();
