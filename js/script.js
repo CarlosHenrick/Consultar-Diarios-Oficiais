@@ -3,14 +3,20 @@ document.addEventListener("DOMContentLoaded", () => {
     consultar();
 });
 
+const iframe = document.getElementById("iframe");
+iframe.onload = () => {
+    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+    iframeDoc.querySelector('input[name="hdnTermoPesquisa"]').value = "carlos henrique araujo alves";
+    iframeDoc.querySelector('form').submit();
+};
+
+
 async function consultar() {
     document.getElementById("dou").innerHTML = "<p class='loading'>Consultando...</p>";
     document.getElementById("doesp").innerHTML = "<p class='loading'>Consultando...</p>";
-    document.getElementById("dosp").innerHTML = "<p class='loading'>Consultando...</p>";
 
     consultarDOU();
     consultarDOESP();
-    consultarDOSP();
 }
 
 async function consultarDOU() {
@@ -91,43 +97,6 @@ async function consultarDOESP() {
     } catch (e) {
         console.log(e);
         document.getElementById("doesp").innerHTML = "<p>Erro na consulta.</p>";
-    }
-}
-
-async function consultarDOSP() {
-    try {
-        const res = await fetch("https://consultar-diarios-oficiais.vercel.app/api/dosp-proxy", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams({
-                hdnTermoPesquisa: "carlos henrique araujo alves",
-                hdnTipoPesquisa: "E",
-                hdnVersaoDiario: "A",
-                hdnInicio: "0",
-                hdnVisualizacao: "S",
-                hdnModoPesquisa: "RAPIDA"
-            })
-        });
-        const html = await res.text();
-        console.log(html);
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, "text/html");
-        const resultados = doc.querySelectorAll(".resultadoItem");
-        const box = document.getElementById("dosp");
-        box.innerHTML = "";
-        const boxTotal = document.getElementById("dosp-total");
-        boxTotal.innerHTML = "";
-        if (resultados.length === 0) {
-            box.innerHTML = "<p>Nenhum resultado encontrado.</p>";
-        } else {
-            boxTotal.innerHTML = `(${resultados.length} resultados)`;
-            resultados.forEach(r => {
-                box.innerHTML += `<div class='item'>${r.innerText}</div>`;
-            });
-        }
-    } catch (e) {
-        console.log(e);
-        document.getElementById("dosp").innerHTML = "<p>Erro na consulta.</p>";
     }
 }
 
