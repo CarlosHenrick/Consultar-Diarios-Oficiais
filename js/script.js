@@ -96,17 +96,17 @@ async function consultarDOESP() {
 
 async function consultarDOSP() {
     try {
-        const urlencoded = new URLSearchParams();
-        urlencoded.append("hdnTermoPesquisa", "carlos henrique araujo alves");
-        urlencoded.append("hdnTipoPesquisa", "E");
-        urlencoded.append("hdnVersaoDiario", "A");
-        urlencoded.append("hdnInicio", "0");
-        urlencoded.append("hdnVisualizacao", "S");
-        urlencoded.append("hdnModoPesquisa", "RAPIDA");
-        const res = await fetch("https://diariooficial.prefeitura.sp.gov.br/md_epubli_controlador.php?acao=materias_pesquisar", {
+        const res = await fetch("https://consultar-diarios-oficiais.vercel.app/api/dosp-proxy", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: urlencoded
+            body: new URLSearchParams({
+                hdnTermoPesquisa: "carlos henrique araujo alves",
+                hdnTipoPesquisa: "E",
+                hdnVersaoDiario: "A",
+                hdnInicio: "0",
+                hdnVisualizacao: "S",
+                hdnModoPesquisa: "RAPIDA"
+            })
         });
         const html = await res.text();
         const parser = new DOMParser();
