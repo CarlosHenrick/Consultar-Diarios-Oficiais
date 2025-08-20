@@ -3,14 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
     consultar();
 });
 
-const iframe = document.getElementById("iframe");
-iframe.onload = () => {
-    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-    iframeDoc.querySelector('input[name="hdnTermoPesquisa"]').value = "carlos henrique araujo alves";
-    iframeDoc.querySelector('form').submit();
-};
-
-
 async function consultar() {
     document.getElementById("dou").innerHTML = "<p class='loading'>Consultando...</p>";
     document.getElementById("doesp").innerHTML = "<p class='loading'>Consultando...</p>";
