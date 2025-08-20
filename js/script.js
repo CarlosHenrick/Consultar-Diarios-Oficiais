@@ -106,9 +106,10 @@ async function consultarDOSP() {
                 hdnInicio: "0",
                 hdnVisualizacao: "S",
                 hdnModoPesquisa: "RAPIDA"
-            }).toString()
+            })
         });
         const html = await res.text();
+        console.log(html);
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, "text/html");
         const resultados = doc.querySelectorAll(".resultadoItem");
