@@ -1,7 +1,7 @@
 // script.js
 document.addEventListener("DOMContentLoaded", () => {
     consultar();
-    setInterval(consultar, 60000);
+    // setInterval(consultar, 60000);
 });
 
 async function consultar() {
