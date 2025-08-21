@@ -108,11 +108,22 @@ async function consultarDOESP() {
 async function consultarDOSP() {
     try {
         const boxBtn = document.getElementById("dosp-btn");
+        const box = document.getElementById("dosp");
+        const boxInner = document.getElementById("inner-box");
+        const iframe = document.getElementById("iframe1");
+
+        boxInner.style.display = "none";
         boxBtn.style.display = "none";
+        box.style.display = "flex";
+
+        iframe.addEventListener("load", function onLoad() {
+            boxInner.style.display = "flex";
+            boxBtn.style.display = "inline-block";
+            box.style.display = "none";
+            iframe.removeEventListener("load", onLoad);
+        });
 
         document.getElementById("formBusca").submit();
-
-        setTimeout(() => { boxBtn.style.display = "inline-block" }, 10000);
     } catch (e) {
         console.error(e);
     }
