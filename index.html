@@ -30,7 +30,7 @@
                 DOSP
                 <button id="dosp-btn" class="refresh-btn" onclick="consultarDOSP()" title="Recarregar">↻</button>
             </h2>
-            <div>
+            <div class="inner-box">
                 <form id="formBusca"
                     action="https://diariooficial.prefeitura.sp.gov.br/md_epubli_controlador.php?acao=materias_pesquisar"
                     method="POST" target="iframe1" style="display:none;">
@@ -41,7 +41,7 @@
                     <input type="hidden" name="hdnVisualizacao" value="S">
                     <input type="hidden" name="hdnModoPesquisa" value="RAPIDA">
                 </form>
-                <iframe height="850" id="iframe1" name="iframe1" width="100%"></iframe>
+                <iframe id="iframe1" name="iframe1"></iframe>
             </div>
         </div>
     </div>
