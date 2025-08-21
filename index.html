@@ -12,19 +12,36 @@
 
     <div class="results">
         <div class="box">
-            <h2>DOU <small id="dou-total"></small></h2>
+            <h2>
+                DOU <small id="dou-total"></small>
+                <button id="dou-btn" class="refresh-btn" onclick="consultarDOU()" title="Recarregar">↻</button>
+            </h2>
             <div id="dou"></div>
         </div>
         <div class="box">
-            <h2>DOESP <small id="doesp-total"></small></h2>
+            <h2>
+                DOESP <small id="doesp-total"></small>
+                <button id="doesp-btn" class="refresh-btn" onclick="consultarDOESP()" title="Recarregar">↻</button>
+            </h2>
             <div id="doesp"></div>
         </div>
         <div class="box">
-            <h2>DOSP</h2>
+            <h2>
+                DOSP
+                <button id="dosp-btn" class="refresh-btn" onclick="consultarDOSP()" title="Recarregar">↻</button>
+            </h2>
             <div>
-                <iframe class="mapa" height="850" id="iframe1"
-                    src="https://diariooficial.prefeitura.sp.gov.br/md_epubli_controlador.php?acao=materias_pesquisar"
-                    width="100% !important"></iframe>
+                <form id="formBusca"
+                    action="https://diariooficial.prefeitura.sp.gov.br/md_epubli_controlador.php?acao=materias_pesquisar"
+                    method="POST" target="iframe1" style="display:none;">
+                    <input type="hidden" name="hdnTermoPesquisa" value="carlos henrique araujo alves">
+                    <input type="hidden" name="hdnTipoPesquisa" value="E">
+                    <input type="hidden" name="hdnVersaoDiario" value="A">
+                    <input type="hidden" name="hdnInicio" value="0">
+                    <input type="hidden" name="hdnVisualizacao" value="S">
+                    <input type="hidden" name="hdnModoPesquisa" value="RAPIDA">
+                </form>
+                <iframe height="850" id="iframe1" name="iframe1" width="100%"></iframe>
             </div>
         </div>
     </div>

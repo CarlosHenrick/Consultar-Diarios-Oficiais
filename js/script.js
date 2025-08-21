@@ -1,18 +1,25 @@
 // script.js
 document.addEventListener("DOMContentLoaded", () => {
     consultar();
+    setInterval(consultar, 60000);
 });
 
 async function consultar() {
-    document.getElementById("dou").innerHTML = "<p class='loading'>Consultando...</p>";
-    document.getElementById("doesp").innerHTML = "<p class='loading'>Consultando...</p>";
-
     consultarDOU();
     consultarDOESP();
+    consultarDOSP();
 }
 
 async function consultarDOU() {
     try {
+        const boxTotal = document.getElementById("dou-total");
+        const boxBtn = document.getElementById("dou-btn");
+        const box = document.getElementById("dou");
+
+        boxTotal.innerHTML = "";
+        boxBtn.style.display = "none";
+        box.innerHTML = "<p class='loading'>Consultando...</p>";
+
         const url = 'https://www.in.gov.br/consulta/-/buscar/dou?q=%22carlos+henrique+araujo+alves%22&s=todos&exactDate=all&sortType=0';
         const res = await fetch(url);
         const html = await res.text();
@@ -20,14 +27,9 @@ async function consultarDOU() {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, "text/html");
 
-        // pega o conteúdo JSON que está dentro do script
         const scriptTag = doc.querySelector("#_br_com_seatecnologia_in_buscadou_BuscaDouPortlet_params");
-        const box = document.getElementById("dou");
-        box.innerHTML = "";
-        const boxTotal = document.getElementById("dou-total");
-        boxTotal.innerHTML = "";
-
         if (!scriptTag) {
+            boxBtn.style.display = "inline-block";
             box.innerHTML = "<p>Não foi possível encontrar resultados.</p>";
             return;
         }
@@ -36,9 +38,12 @@ async function consultarDOU() {
         const resultados = data.jsonArray || [];
 
         if (resultados.length === 0) {
+            boxBtn.style.display = "inline-block";
             box.innerHTML = "<p>Nenhum resultado encontrado.</p>";
         } else {
             boxTotal.innerHTML = `(${resultados.length} resultados)`;
+            boxBtn.style.display = "inline-block";
+            box.innerHTML = "";
             resultados.forEach(item => {
                 box.innerHTML += `
           <div class="item">
@@ -60,19 +65,27 @@ async function consultarDOU() {
 
 async function consultarDOESP() {
     try {
+        const boxTotal = document.getElementById("doesp-total");
+        const boxBtn = document.getElementById("doesp-btn");
+        const box = document.getElementById("doesp");
+
+        boxTotal.innerHTML = "";
+        boxBtn.style.display = "none";
+        box.innerHTML = "<p class='loading'>Consultando...</p>";
+
         const fromDate = formatDate(new Date(2023, 10, 1));
         const toDate = formatDate(new Date());
         const url = `https://do-api-web-search.doe.sp.gov.br/v2/advanced-search/publications?periodStartingDate=personalized&PageNumber=1&Terms%5B0%5D=carlos%20henrique%20ara%C3%BAjo%20alves&Terms%5B1%5D=carlos%20henrique%20araujo%20alves&FromDate=${fromDate}&ToDate=${toDate}&PageSize=10000&SortField=Date`;
         const res = await fetch(url);
         const data = await res.json();
-        const box = document.getElementById("doesp");
-        box.innerHTML = "";
-        const boxTotal = document.getElementById("doesp-total");
-        boxTotal.innerHTML = "";
+
         if (data.items.length === 0) {
+            boxBtn.style.display = "inline-block";
             box.innerHTML = "<p>Nenhum resultado encontrado.</p>";
         } else {
             boxTotal.innerHTML = `(${data.items.length} resultados)`;
+            boxBtn.style.display = "inline-block";
+            box.innerHTML = "";
             const resultados = data.items.sort((a, b) => new Date(b.date) - new Date(a.date));
             resultados.forEach(item => {
                 box.innerHTML += `
@@ -89,6 +102,19 @@ async function consultarDOESP() {
     } catch (e) {
         console.log(e);
         document.getElementById("doesp").innerHTML = "<p>Erro na consulta.</p>";
+    }
+}
+
+async function consultarDOSP() {
+    try {
+        const boxBtn = document.getElementById("dosp-btn");
+        boxBtn.style.display = "none";
+
+        document.getElementById("formBusca").submit();
+
+        setTimeout(() => { boxBtn.style.display = "inline-block" }, 10000);
+    } catch (e) {
+        console.error(e);
     }
 }
 
