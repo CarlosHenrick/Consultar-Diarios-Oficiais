@@ -18,7 +18,14 @@ async function consultarDOU() {
 
         boxTotal.innerHTML = "";
         boxBtn.style.display = "none";
-        box.innerHTML = "<p class='loading'>Consultando...</p>";
+        box.innerHTML = "<p class='loading'>Consultando</p>";
+
+        let intervalId;
+        let dots = 0;
+        intervalId = setInterval(() => {
+            dots = (dots + 1) % 4;
+            box.innerHTML = `<p class='loading'>Consultando${".".repeat(dots)}</p>`;
+        }, 500);
 
         const url = 'https://www.in.gov.br/consulta/-/buscar/dou?q=%22carlos+henrique+araujo+alves%22&s=todos&exactDate=all&sortType=0';
         const res = await fetch(url);
@@ -26,6 +33,8 @@ async function consultarDOU() {
 
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, "text/html");
+
+        clearInterval(intervalId);
 
         const scriptTag = doc.querySelector("#_br_com_seatecnologia_in_buscadou_BuscaDouPortlet_params");
         if (!scriptTag) {
@@ -71,13 +80,22 @@ async function consultarDOESP() {
 
         boxTotal.innerHTML = "";
         boxBtn.style.display = "none";
-        box.innerHTML = "<p class='loading'>Consultando...</p>";
+        box.innerHTML = "<p class='loading'>Consultando</p>";
+
+        let intervalId;
+        let dots = 0;
+        intervalId = setInterval(() => {
+            dots = (dots + 1) % 4;
+            box.innerHTML = `<p class='loading'>Consultando${".".repeat(dots)}</p>`;
+        }, 500);
 
         const fromDate = formatDate(new Date(1890, 0, 1));
         const toDate = formatDate(new Date());
         const url = `https://do-api-web-search.doe.sp.gov.br/v2/advanced-search/publications?periodStartingDate=personalized&PageNumber=1&Terms%5B0%5D=carlos%20henrique%20ara%C3%BAjo%20alves&Terms%5B1%5D=carlos%20henrique%20araujo%20alves&FromDate=${fromDate}&ToDate=${toDate}&PageSize=10000&SortField=Date`;
         const res = await fetch(url);
         const data = await res.json();
+
+        clearInterval(intervalId);
 
         if (data.items.length === 0) {
             boxBtn.style.display = "inline-block";
@@ -107,16 +125,27 @@ async function consultarDOESP() {
 
 async function consultarDOSP() {
     try {
+        const loadingText = document.getElementById("dosp-loading");
         const boxBtn = document.getElementById("dosp-btn");
         const box = document.getElementById("dosp");
         const boxInner = document.getElementById("inner-box");
         const iframe = document.getElementById("iframe1");
-
+        
+        loadingText.textContent = "Consultando";
         boxInner.style.display = "none";
         boxBtn.style.display = "none";
         box.style.display = "flex";
 
+        let intervalId;
+        let dots = 0;
+        intervalId = setInterval(() => {
+            dots = (dots + 1) % 4;
+            loadingText.textContent = "Consultando" + ".".repeat(dots);
+        }, 500);
+
         iframe.addEventListener("load", function onLoad() {
+            clearInterval(intervalId);
+
             boxInner.style.display = "flex";
             boxBtn.style.display = "inline-block";
             box.style.display = "none";
