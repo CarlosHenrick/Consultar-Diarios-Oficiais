@@ -66,6 +66,10 @@ h2 {
     padding: 8px 0;
 }
 
+.item:first-child {
+    border-top: 1px solid #ddd;
+}
+
 #iframe1 {
     flex: 1;
     width: 100%;
