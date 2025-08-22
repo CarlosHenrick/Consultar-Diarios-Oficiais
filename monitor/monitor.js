@@ -14,7 +14,7 @@ async function run() {
     await page.goto(URL, { waitUntil: "networkidle2" });
 
     console.log("Esperando 60s para carregar iframes...");
-    await page.waitForTimeout(60_000);
+    await new Promise(resolve => setTimeout(resolve, 60_000));
 
     console.log("Tirando screenshot...");
     const screenshot = "screenshot.png";
