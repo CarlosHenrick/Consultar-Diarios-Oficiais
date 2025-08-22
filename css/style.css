@@ -62,12 +62,12 @@ h2 {
 }
 
 .item {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #ccc;
     padding: 8px 0;
 }
 
 .item:first-child {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #ccc;
 }
 
 #iframe1 {
