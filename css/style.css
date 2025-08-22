@@ -82,4 +82,6 @@ hr {
     width: 100%;
     min-height: 100vh;
     border: none;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
 }
