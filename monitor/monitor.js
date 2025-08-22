@@ -4,7 +4,10 @@ import nodemailer from "nodemailer";
 const URL = "https://consultar-diarios-oficiais.vercel.app";
 
 async function run() {
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
     const page = await browser.newPage();
 
     console.log("Abrindo página...");
