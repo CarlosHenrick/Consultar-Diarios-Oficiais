@@ -10,7 +10,10 @@ async function run() {
     });
     const page = await browser.newPage();
 
-    console.log("Abrindo página...");
+    console.log("Configurando viewport...");
+    await page.setViewport({ width: 1366, height: 768 });
+
+    console.log("Abrindo página...");console.log("Abrindo página...");
     await page.goto(URL, { waitUntil: "networkidle2" });
 
     console.log("Esperando 60s para carregar iframes...");
@@ -18,7 +21,7 @@ async function run() {
 
     console.log("Tirando screenshot...");
     const screenshot = "screenshot.png";
-    await page.screenshot({ path: screenshot, fullPage: true });
+    await page.screenshot({ path: screenshot });
 
     await browser.close();
 
