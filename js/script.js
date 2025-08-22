@@ -60,7 +60,6 @@ async function consultarDOU() {
             <i>${item.artType}</i><br>
             <small>${item.hierarchyStr}</small><br>
             <a href="https://www.in.gov.br/en/web/dou/-/${item.urlTitle}" target="_blank">Acessar publicação</a>
-            <hr>
           </div>
         `;
             });
@@ -112,7 +111,6 @@ async function consultarDOESP() {
                 <i>${item.publicationTypeId === "53af8d5d-53db-490b-974e-0a0b20a96dde" ? "Edital" : "Publicação"}</i><br>
                 <small>${item.hierarchy}</small><br>
                 <a href="https://www.doe.sp.gov.br/${item.slug}" target="_blank">Acessar publicação</a>
-                <hr>
             </div>
             `;
             });
