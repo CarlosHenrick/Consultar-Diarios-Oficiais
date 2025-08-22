@@ -69,5 +69,6 @@ h2 {
 #iframe1 {
     flex: 1;
     width: 100%;
+    min-height: 100vh;
     border: none;
 }
