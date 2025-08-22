@@ -73,7 +73,7 @@ async function consultarDOESP() {
         boxBtn.style.display = "none";
         box.innerHTML = "<p class='loading'>Consultando...</p>";
 
-        const fromDate = formatDate(new Date(2023, 10, 1));
+        const fromDate = formatDate(new Date(1890, 1, 1));
         const toDate = formatDate(new Date());
         const url = `https://do-api-web-search.doe.sp.gov.br/v2/advanced-search/publications?periodStartingDate=personalized&PageNumber=1&Terms%5B0%5D=carlos%20henrique%20ara%C3%BAjo%20alves&Terms%5B1%5D=carlos%20henrique%20araujo%20alves&FromDate=${fromDate}&ToDate=${toDate}&PageSize=10000&SortField=Date`;
         const res = await fetch(url);
