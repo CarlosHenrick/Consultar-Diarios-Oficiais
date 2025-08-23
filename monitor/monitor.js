@@ -9,7 +9,7 @@ async function run() {
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
-            '--proxy-server=socks4://177.67.136.25:4153'
+            '--proxy-server=https://18.230.17.132:3128'
         ]
     });
     const page = await browser.newPage();
