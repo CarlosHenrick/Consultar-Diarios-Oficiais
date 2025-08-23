@@ -10,7 +10,7 @@ async function run() {
             '--no-sandbox',
             '--disable-setuid-sandbox',
             // '--proxy-server=http://51.254.69.243:3128',
-            '--proxy-server=socks4://186.224.225.82:42648',
+            // '--proxy-server=socks4://186.224.225.82:42648',
             // '--proxy-server=socks5://45.146.130.45:5101',
             // '--proxy-server=socks5://45.146.130.45:4013',
         ]
@@ -49,7 +49,8 @@ async function sendEmail(file) {
         from: `"Monitor Página" <${process.env.MAIL_USER}>`,
         to: process.env.MAIL_TO,
         subject: "📸 Screenshot da página monitorada",
-        text: "Segue em anexo o print automático da página.",
+        html: `Segue em anexo o print automático da página.<br><br>
+           <a href="https://consultar-diarios-oficiais.vercel.app/">Acesse a página de consulta aqui</a>`,
         attachments: [{ filename: "screenshot.png", path: file }],
     });
 
