@@ -18,7 +18,7 @@ async function run() {
     await page.setViewport({ width: 1366, height: 768 });
 
     console.log("Abrindo página...");
-    await page.goto(URL, { waitUntil: "networkidle2", timeout: 120_000 });
+    await page.goto(URL, { waitUntil: "networkidle2", timeout: 60_000 });
 
     console.log("Esperando 60s para carregar página completamente...");
     await new Promise(resolve => setTimeout(resolve, 60_000));
