@@ -6,17 +6,21 @@ const URL = "https://consultar-diarios-oficiais.vercel.app";
 async function run() {
     const browser = await puppeteer.launch({
         headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--proxy-server=45.236.215.111:60955'
+        ]
     });
     const page = await browser.newPage();
 
     console.log("Configurando viewport...");
     await page.setViewport({ width: 1366, height: 768 });
 
-    console.log("Abrindo página...");console.log("Abrindo página...");
+    console.log("Abrindo página...");
     await page.goto(URL, { waitUntil: "networkidle2" });
 
-    console.log("Esperando 60s para carregar iframes...");
+    console.log("Esperando 60s para carregar página completamente...");
     await new Promise(resolve => setTimeout(resolve, 60_000));
 
     console.log("Tirando screenshot...");
