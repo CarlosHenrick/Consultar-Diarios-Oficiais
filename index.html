@@ -3,8 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="theme-color" content="#000000">
     <title>Consultar Nome nos Diários Oficiais</title>
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/favicon.ico">
 </head>
 
 <body>
@@ -33,7 +36,9 @@
                 <button id="dosp-btn" class="refresh-btn" onclick="consultarDOSP()" title="Recarregar">↻</button>
             </h2>
             <hr>
-            <div id="dosp"><p id="dosp-loading" class='loading'></p></div>
+            <div id="dosp">
+                <p id="dosp-loading" class='loading'></p>
+            </div>
             <div id="inner-box" class="inner-box">
                 <form id="formBusca"
                     action="https://diariooficial.prefeitura.sp.gov.br/md_epubli_controlador.php?acao=materias_pesquisar"
