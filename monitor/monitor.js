@@ -9,9 +9,9 @@ async function run() {
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
-            // '--proxy-server=http://51.254.69.243:3128',
+            '--proxy-server=http://177.184.195.168:8080',
             // '--proxy-server=socks4://186.224.225.82:42648',
-            '--proxy-server=socks5://45.146.130.15:7566',
+            // '--proxy-server=socks5://45.146.130.15:7566',
             // '--proxy-server=socks5://45.146.130.45:4013',
         ]
     });
