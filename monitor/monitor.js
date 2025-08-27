@@ -9,10 +9,9 @@ async function run() {
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
-            // '--proxy-server=http://51.254.69.243:3128',
+            // '--proxy-server=http://179.42.6.24:3128',
             // '--proxy-server=socks4://186.224.225.82:42648',
-            // '--proxy-server=socks5://45.146.130.45:5101',
-            // '--proxy-server=socks5://45.146.130.45:4013',
+            // '--proxy-server=socks5://45.146.130.15:7566',
         ]
     });
     const page = await browser.newPage();
