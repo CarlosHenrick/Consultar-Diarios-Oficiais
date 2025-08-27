@@ -1,7 +1,8 @@
 import puppeteer from "puppeteer";
 import nodemailer from "nodemailer";
 
-const URL = "https://iy3pwybxrzx7ryuh7psi6shpyy0dbjmc.lambda-url.sa-east-1.on.aws";
+// const URL = "https://iy3pwybxrzx7ryuh7psi6shpyy0dbjmc.lambda-url.sa-east-1.on.aws";
+const URL = "https://consultar-diarios-oficiais.vercel.app";
 
 async function run() {
     const browser = await puppeteer.launch({
