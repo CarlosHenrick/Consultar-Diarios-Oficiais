@@ -39,7 +39,7 @@ async function consultarDOU() {
         const scriptTag = doc.querySelector("#_br_com_seatecnologia_in_buscadou_BuscaDouPortlet_params");
         if (!scriptTag) {
             boxBtn.style.display = "inline-block";
-            box.innerHTML = doc;
+            box.innerHTML = html;
             return;
         }
 
