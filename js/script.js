@@ -40,6 +40,7 @@ async function consultarDOU() {
         if (!scriptTag) {
             boxBtn.style.display = "inline-block";
             box.innerHTML = html;
+            // box.innerHTML = "<p>Não foi possível encontrar resultados.</p>";
             return;
         }
 
