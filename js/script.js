@@ -132,14 +132,6 @@ async function consultarDOSP() {
         const box = document.getElementById("dosp");
         const boxInner = document.getElementById("inner-box");
         const iframe = document.getElementById("iframe1");
-        const formData = new FormData();
-
-        formData.append('hdnTermoPesquisa', 'carlos henrique araújo alves');
-        formData.append('hdnTipoPesquisa', 'E');
-        formData.append('hdnVersaoDiario', 'A');
-        formData.append('hdnInicio', '0');
-        formData.append('hdnVisualizacao', 'S');
-        formData.append('hdnModoPesquisa', 'RAPIDA');
 
         loadingText.textContent = "Consultando";
         boxInner.style.display = "none";
@@ -152,21 +144,16 @@ async function consultarDOSP() {
             loadingText.textContent = "Consultando" + ".".repeat(dots);
         }, 500);
 
-        fetch('https://diariooficial.prefeitura.sp.gov.br/md_epubli_controlador.php?acao=materias_pesquisar', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.text())
-            .then(data => {
-                iframe.contentDocument.write(data);
-                iframe.contentDocument.close();
+        iframe.addEventListener("load", function onLoad() {
+            clearInterval(intervalId);
 
-                clearInterval(intervalId);
+            boxInner.style.display = "flex";
+            boxBtn.style.display = "inline-block";
+            box.style.display = "none";
+            iframe.removeEventListener("load", onLoad);
+        });
 
-                boxInner.style.display = "flex";
-                boxBtn.style.display = "inline-block";
-                box.style.display = "none";
-            });
+        document.getElementById("formBusca").submit();
     } catch (e) {
         console.error(e);
         clearInterval(intervalId);
