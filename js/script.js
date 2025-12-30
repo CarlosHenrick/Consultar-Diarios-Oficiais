@@ -11,6 +11,7 @@ async function consultar() {
 }
 
 async function consultarDOU() {
+    let intervalId;
     try {
         const boxTotal = document.getElementById("dou-total");
         const boxBtn = document.getElementById("dou-btn");
@@ -20,7 +21,6 @@ async function consultarDOU() {
         boxBtn.style.display = "none";
         box.innerHTML = "<p class='loading'>Consultando</p>";
 
-        let intervalId;
         let dots = 0;
         intervalId = setInterval(() => {
             dots = (dots + 1) % 4;
@@ -39,8 +39,8 @@ async function consultarDOU() {
         const scriptTag = doc.querySelector("#_br_com_seatecnologia_in_buscadou_BuscaDouPortlet_params");
         if (!scriptTag) {
             boxBtn.style.display = "inline-block";
-            // box.innerHTML = html;
-            box.innerHTML = "<p>Não foi possível encontrar resultados.</p>";
+            box.innerHTML = html;
+            // box.innerHTML = "<p>Não foi possível encontrar resultados.</p>";
             return;
         }
 
@@ -68,11 +68,13 @@ async function consultarDOU() {
 
     } catch (e) {
         console.error(e);
+        clearInterval(intervalId);
         document.getElementById("dou").innerHTML = "<p>Erro na consulta.</p>";
     }
 }
 
 async function consultarDOESP() {
+    let intervalId;
     try {
         const boxTotal = document.getElementById("doesp-total");
         const boxBtn = document.getElementById("doesp-btn");
@@ -82,7 +84,6 @@ async function consultarDOESP() {
         boxBtn.style.display = "none";
         box.innerHTML = "<p class='loading'>Consultando</p>";
 
-        let intervalId;
         let dots = 0;
         intervalId = setInterval(() => {
             dots = (dots + 1) % 4;
@@ -117,25 +118,26 @@ async function consultarDOESP() {
             });
         }
     } catch (e) {
-        console.log(e);
+        console.error(e);
+        clearInterval(intervalId);
         document.getElementById("doesp").innerHTML = "<p>Erro na consulta.</p>";
     }
 }
 
 async function consultarDOSP() {
+    let intervalId;
     try {
         const loadingText = document.getElementById("dosp-loading");
         const boxBtn = document.getElementById("dosp-btn");
         const box = document.getElementById("dosp");
         const boxInner = document.getElementById("inner-box");
         const iframe = document.getElementById("iframe1");
-        
+
         loadingText.textContent = "Consultando";
         boxInner.style.display = "none";
         boxBtn.style.display = "none";
         box.style.display = "flex";
 
-        let intervalId;
         let dots = 0;
         intervalId = setInterval(() => {
             dots = (dots + 1) % 4;
@@ -154,6 +156,7 @@ async function consultarDOSP() {
         document.getElementById("formBusca").submit();
     } catch (e) {
         console.error(e);
+        clearInterval(intervalId);
     }
 }
 
