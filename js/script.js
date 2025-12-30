@@ -27,7 +27,7 @@ async function consultarDOU() {
             box.innerHTML = `<p class='loading'>Consultando${".".repeat(dots)}</p>`;
         }, 500);
 
-        const url = 'https://www.in.gov.br/consulta/-/buscar/dou?q=%22carlos+henrique+araujo+alves%22&s=todos&exactDate=all&sortType=0';
+        const url = 'https://www.in.gov.br/consulta/-/buscar/dou?q=%22carlos+henrique+ara%C3%BAjo+alves%22&s=todos&exactDate=all&sortType=0';
         const res = await fetch(url);
         const html = await res.text();
 
