@@ -132,8 +132,6 @@ async function consultarDOSP() {
         const box = document.getElementById("dosp");
         const boxInner = document.getElementById("inner-box");
         const iframe = document.getElementById("iframe1");
-        
-        document.querySelector('input[name="hdnTermoPesquisa"]').value = "carlos henrique araújo alves";
 
         loadingText.textContent = "Consultando";
         boxInner.style.display = "none";
