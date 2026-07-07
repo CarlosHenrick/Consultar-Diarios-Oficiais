@@ -52,6 +52,13 @@ async function consultarDOJB() {
         const res = await fetch(url);
         const html = await res.text();
 
+        // Configuração para usar a API interna (api/jusbrasil.js) para contornar restrições de CORS
+        // const apiUrl = '/api/jusbrasil';
+        // const res = await fetch(apiUrl);
+        // if (!res.ok) throw new Error(`Erro na API: ${res.status}`);
+        // const data = await res.json();
+        // const html = data.html;
+
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, "text/html");
 
