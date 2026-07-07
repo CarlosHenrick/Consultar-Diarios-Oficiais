@@ -34,70 +34,36 @@ function extrairResultadosJusbrasil(data) {
 async function consultarDOJB() {
     let intervalId;
     try {
-        const boxTotal = document.getElementById("dojb-total");
+        const loadingText = document.getElementById("dojb-loading");
         const boxBtn = document.getElementById("dojb-btn");
         const box = document.getElementById("dojb");
+        const boxInner = document.getElementById("inner-box-2");
+        const iframe = document.getElementById("iframe2");
 
-        boxTotal.innerHTML = "";
+        loadingText.textContent = "Consultando";
+        boxInner.style.display = "none";
         boxBtn.style.display = "none";
-        box.innerHTML = "<p class='loading'>Consultando</p>";
+        box.style.display = "flex";
 
         let dots = 0;
         intervalId = setInterval(() => {
             dots = (dots + 1) % 4;
-            box.innerHTML = `<p class='loading'>Consultando${".".repeat(dots)}</p>`;
+            loadingText.textContent = "Consultando" + ".".repeat(dots);
         }, 500);
 
-        const url = 'https://www.jusbrasil.com.br/diarios/busca?o=data&p=1&q=%22Carlos+Henrique+Araujo+Alves%22';
-        const res = await fetch(url);
-        const html = await res.text();
+        iframe.addEventListener("load", function onLoad() {
+            clearInterval(intervalId);
 
-        // Configuração para usar a API interna (api/jusbrasil.js) para contornar restrições de CORS
-        // const apiUrl = '/api/jusbrasil';
-        // const res = await fetch(apiUrl);
-        // if (!res.ok) throw new Error(`Erro na API: ${res.status}`);
-        // const data = await res.json();
-        // const html = data.html;
-
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, "text/html");
-
-        clearInterval(intervalId);
-
-        const scriptTag = doc.querySelector("#__NEXT_DATA__");
-        if (!scriptTag) {
+            boxInner.style.display = "flex";
             boxBtn.style.display = "inline-block";
-            box.innerHTML = html;
-            // box.innerHTML = "<p>Não foi possível encontrar resultados.</p>";
-            return;
-        }
+            box.style.display = "none";
+            iframe.removeEventListener("load", onLoad);
+        });
 
-        const data = JSON.parse(scriptTag.textContent);
-        const resultados = extrairResultadosJusbrasil(data);
-
-        if (resultados.length === 0) {
-            boxBtn.style.display = "inline-block";
-            box.innerHTML = "<p>Nenhum resultado encontrado.</p>";
-        } else {
-            boxTotal.innerHTML = `(${resultados.length} resultados)`;
-            boxBtn.style.display = "inline-block";
-            box.innerHTML = "";
-            resultados.forEach(item => {
-                box.innerHTML += `
-          <div class="item">
-            <b>${item.title}</b> (${item.pubDate})<br>
-            <i>${item.artType}</i><br>
-            <small>${item.hierarchyStr}</small><br>
-            <a href="${item.url}" target="_blank">Acessar publicação</a>
-          </div>
-        `;
-            });
-        }
-
+        iframe.src = "https://www.jusbrasil.com.br/diarios/busca?o=data&p=1&q=%22Carlos+Henrique+Araujo+Alves%22";
     } catch (e) {
         console.error(e);
         clearInterval(intervalId);
-        document.getElementById("dojb").innerHTML = "<p>Erro na consulta.</p>";
     }
 }
 
@@ -221,7 +187,7 @@ async function consultarDOSP() {
         const loadingText = document.getElementById("dosp-loading");
         const boxBtn = document.getElementById("dosp-btn");
         const box = document.getElementById("dosp");
-        const boxInner = document.getElementById("inner-box");
+        const boxInner = document.getElementById("inner-box-1");
         const iframe = document.getElementById("iframe1");
 
         loadingText.textContent = "Consultando";
