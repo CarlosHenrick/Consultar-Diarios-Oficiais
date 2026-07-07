@@ -5,9 +5,93 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function consultar() {
+    consultarDOJB();
     consultarDOU();
     consultarDOESP();
     consultarDOSP();
+}
+
+function extrairResultadosJusbrasil(data) {
+    const root = data?.props?.pageProps?.__APOLLO_STATE__?.ROOT_QUERY?.root || {};
+    const searchKey = Object.keys(root).find((key) => key.startsWith("searchHaystackSerp("));
+    const searchResult = searchKey ? root[searchKey] : null;
+
+    return (searchResult?.content?.components?.[0]?.components || [])
+        .filter((item) => item?.fields)
+        .map((item) => {
+            const fields = item.fields;
+            return {
+                title: fields.title || "",
+                pubDate: fields.date ? new Date(fields.date).toLocaleDateString("pt-BR") : "",
+                artType: fields.author?.name || "",
+                hierarchyStr: fields.author?.name || "",
+                url: fields.url || "",
+                urlTitle: fields.url || ""
+            };
+        });
+}
+
+async function consultarDOJB() {
+    let intervalId;
+    try {
+        const boxTotal = document.getElementById("dojb-total");
+        const boxBtn = document.getElementById("dojb-btn");
+        const box = document.getElementById("dojb");
+
+        boxTotal.innerHTML = "";
+        boxBtn.style.display = "none";
+        box.innerHTML = "<p class='loading'>Consultando</p>";
+
+        let dots = 0;
+        intervalId = setInterval(() => {
+            dots = (dots + 1) % 4;
+            box.innerHTML = `<p class='loading'>Consultando${".".repeat(dots)}</p>`;
+        }, 500);
+
+        const url = 'https://www.jusbrasil.com.br/diarios/busca?o=data&p=1&q=%22Carlos+Henrique+Araujo+Alves%22';
+        const res = await fetch(url);
+        const html = await res.text();
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+
+        clearInterval(intervalId);
+
+        const scriptTag = doc.querySelector("#__NEXT_DATA__");
+        if (!scriptTag) {
+            boxBtn.style.display = "inline-block";
+            box.innerHTML = html;
+            // box.innerHTML = "<p>Não foi possível encontrar resultados.</p>";
+            return;
+        }
+
+        const data = JSON.parse(scriptTag.textContent);
+        const resultados = extrairResultadosJusbrasil(data);
+
+        if (resultados.length === 0) {
+            boxBtn.style.display = "inline-block";
+            box.innerHTML = "<p>Nenhum resultado encontrado.</p>";
+        } else {
+            boxTotal.innerHTML = `(${resultados.length} resultados)`;
+            boxBtn.style.display = "inline-block";
+            box.innerHTML = "";
+            resultados.forEach(item => {
+                box.innerHTML += `
+          <div class="item">
+            <b>${item.title}</b> (${item.pubDate})<br>
+            <i>${item.artType}</i><br>
+            <small>${item.hierarchyStr}</small><br>
+            <a href="${item.url}" target="_blank">Acessar publicação</a>
+          </div>
+        `;
+            });
+        }
+
+    } catch (e) {
+        console.error(e);
+        clearInterval(intervalId);
+        document.getElementById("dojb").innerHTML = "<p>Erro na consulta.</p>";
+    }
 }
 
 async function consultarDOU() {
