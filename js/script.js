@@ -97,7 +97,10 @@ async function consultarDOJB() {
     } catch (e) {
         console.error(e);
         clearInterval(intervalId);
-        document.getElementById("dojb").innerHTML = "<p>Erro na consulta.</p>";
+        document.getElementById("dojb").innerHTML = `
+            <p>Erro na consulta.</p>
+            <p>Acesse diretamente no Jusbrasil: <a href="https://www.jusbrasil.com.br/diarios/busca?o=data&q=%22Carlos+Henrique+Araujo+Alves%22" target="_blank">Jusbrasil</a></p>
+        `;
     }
 }
 
@@ -160,7 +163,10 @@ async function consultarDOU() {
     } catch (e) {
         console.error(e);
         clearInterval(intervalId);
-        document.getElementById("dou").innerHTML = "<p>Erro na consulta.</p>";
+        document.getElementById("dou").innerHTML = `
+            <p>Erro na consulta.</p>
+            <p>Acesse diretamente no Diário Oficial da União: <a href="https://www.in.gov.br/consulta/-/buscar/dou?q=%22carlos+henrique+ara%C3%BAjo+alves%22&s=todos&exactDate=all&sortType=0" target="_blank">DOU</a></p>
+        `;
     }
 }
 
@@ -211,7 +217,10 @@ async function consultarDOESP() {
     } catch (e) {
         console.error(e);
         clearInterval(intervalId);
-        document.getElementById("doesp").innerHTML = "<p>Erro na consulta.</p>";
+        document.getElementById("doesp").innerHTML = `
+            <p>Erro na consulta.</p>
+            <p>Acesse diretamente no Diário Oficial do Estado de São Paulo: <a href="https://www.doe.sp.gov.br/busca-avancada" target="_blank">DOESP</a></p>
+        `;
     }
 }
 
@@ -248,6 +257,10 @@ async function consultarDOSP() {
     } catch (e) {
         console.error(e);
         clearInterval(intervalId);
+        document.getElementById("dosp").innerHTML = `
+            <p>Erro na consulta.</p>
+            <p>Acesse diretamente no Diário Oficial da Cidade de São Paulo: <a href="https://diariooficial.prefeitura.sp.gov.br/md_epubli_controlador.php?acao=materias_pesquisar" target="_blank">DOSP</a></p>
+        `;
     }
 }
 
