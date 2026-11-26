@@ -164,8 +164,9 @@ async function consultarDOU() {
         console.error(e);
         clearInterval(intervalId);
         document.getElementById("dou").innerHTML = `
-            <p>Erro na consulta.</p>
-            <p>Acesse diretamente no Diário Oficial da União: <a href="https://www.in.gov.br/consulta/-/buscar/dou?q=%22carlos+henrique+ara%C3%BAjo+alves%22&s=todos&exactDate=all&sortType=0" target="_blank">DOU</a></p>
+            <a href="https://www.in.gov.br/consulta/-/buscar/dou?q=%22carlos+henrique+ara%C3%BAjo+alves%22&s=todos&exactDate=all&sortType=0" target="_blank">
+              <button id="btnBuscaDOSP"><span class="icon">➜]</span> Abrir resultado em nova guia</button>
+            </a>
         `;
     }
 }
