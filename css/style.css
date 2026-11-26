@@ -97,3 +97,7 @@ hr {
     cursor: pointer;
     transition: background-color 0.2s;
 }
+
+.icon {
+    margin-right: 5px;
+}
