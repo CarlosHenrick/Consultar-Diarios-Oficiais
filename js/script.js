@@ -8,7 +8,7 @@ async function consultar() {
     consultarDOJB();
     consultarDOU();
     consultarDOESP();
-    consultarDOSP();
+    // consultarDOSP();
 }
 
 function extrairResultadosJusbrasil(data) {
@@ -227,31 +227,31 @@ async function consultarDOESP() {
 async function consultarDOSP() {
     let intervalId;
     try {
-        // const loadingText = document.getElementById("dosp-loading");
-        // const boxBtn = document.getElementById("dosp-btn");
-        // const box = document.getElementById("dosp");
-        // const boxInner = document.getElementById("inner-box");
-        // const iframe = document.getElementById("iframe1");
+        const loadingText = document.getElementById("dosp-loading");
+        const boxBtn = document.getElementById("dosp-btn");
+        const box = document.getElementById("dosp");
+        const boxInner = document.getElementById("inner-box");
+        const iframe = document.getElementById("iframe1");
 
-        // loadingText.textContent = "Consultando";
-        // boxInner.style.display = "none";
-        // boxBtn.style.display = "none";
-        // box.style.display = "flex";
+        loadingText.textContent = "Consultando";
+        boxInner.style.display = "none";
+        boxBtn.style.display = "none";
+        box.style.display = "flex";
 
-        // let dots = 0;
-        // intervalId = setInterval(() => {
-        //     dots = (dots + 1) % 4;
-        //     loadingText.textContent = "Consultando" + ".".repeat(dots);
-        // }, 500);
+        let dots = 0;
+        intervalId = setInterval(() => {
+            dots = (dots + 1) % 4;
+            loadingText.textContent = "Consultando" + ".".repeat(dots);
+        }, 500);
 
-        // iframe.addEventListener("load", function onLoad() {
-        //     clearInterval(intervalId);
+        iframe.addEventListener("load", function onLoad() {
+            clearInterval(intervalId);
 
-        //     boxInner.style.display = "flex";
-        //     boxBtn.style.display = "inline-block";
-        //     box.style.display = "none";
-        //     iframe.removeEventListener("load", onLoad);
-        // });
+            boxInner.style.display = "flex";
+            boxBtn.style.display = "inline-block";
+            box.style.display = "none";
+            iframe.removeEventListener("load", onLoad);
+        });
 
         document.getElementById("formBusca").submit();
     } catch (e) {
