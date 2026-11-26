@@ -86,7 +86,8 @@ hr {
     border-bottom: 1px solid #ccc;
 }
 
-button {
+#btnBuscaDOJB,
+#btnBuscaDOSP {
     background-color: #007BFF;
     color: white;
     border: none;
