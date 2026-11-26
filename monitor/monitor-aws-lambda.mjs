@@ -12,8 +12,8 @@ export const handler = async () => {
 
     try {
         console.log("Consultando totais anteriores no DynamoDB...");
-        const { dou: douTotalEsperado, doesp: doespTotalEsperado, dosp: dospTotalEsperado, djb: djbTotalEsperado } = await getValoresEsperados();
-        console.log("DOU Esperado:", douTotalEsperado, "DOESP Esperado:", doespTotalEsperado, "DOSP Esperado:", dospTotalEsperado, "DJB Esperado:", djbTotalEsperado);
+        const { dou: douTotalEsperado, doesp: doespTotalEsperado, dosp: dospTotalEsperado } = await getValoresEsperados();
+        console.log("DOU Esperado:", douTotalEsperado, "DOESP Esperado:", doespTotalEsperado, "DOSP Esperado:", dospTotalEsperado);
 
         console.log("Iniciando Chromium...");
         browser = await puppeteer.launch({
@@ -51,41 +51,39 @@ export const handler = async () => {
             await page.$eval("#doesp-total", el => el.textContent.match(/\d+/)?.[0] || "0")
         );
 
-        const dojbPage = await clicarEAguardarPopup(page, "#btnBuscaDOJB", "Jusbrasil");
-        const dojbSelector = 'p[class*="result-count-subtitle_resultCountPhrase"]';
-        await dojbPage.waitForFunction((selector) => {
-            const countElement = document.querySelector(selector);
-            return Boolean(
-                countElement?.textContent?.trim() ||
-                document.body.innerText.match(/\b[\d.,]+\s+resultados?\b/i)
-            );
-        }, { timeout: 90_000 }, dojbSelector);
-        const dojbTotalText = await dojbPage.evaluate((selector) =>
-            document.querySelector(selector)?.textContent?.trim() ||
-            document.body.innerText.match(/\b[\d.,]+\s+resultados?\b/i)?.[0] ||
-            "", dojbSelector);
-        const dojbTotalMatch = dojbTotalText.match(/[\d.,]+/);
-        const dojbTotal = dojbTotalMatch
-            ? Number(dojbTotalMatch[0].replace(/\D/g, ""))
-            : 0;
+        const dospPage = await new Promise((resolve, reject) => {
+            const onPopup = popup => {
+                clearTimeout(timeout);
+                resolve(popup);
+            };
+            const timeout = setTimeout(() => {
+                page.off("popup", onPopup);
+                reject(new Error("A página de resultados do DOSP não foi aberta"));
+            }, 90_000);
 
-        const dospPage = await clicarEAguardarPopup(page, "#btnBuscaDOSP", "DOSP");
+            page.once("popup", onPopup);
+            page.click("#btnBuscaDOSP").catch(error => {
+                clearTimeout(timeout);
+                page.off("popup", onPopup);
+                reject(error);
+            });
+        });
+
         await dospPage.waitForSelector(".nroResultados", { timeout: 90_000 });
         const dospTotal = parseInt(
             await dospPage.$eval(".nroResultados", el => el.textContent.trim())
         ) || 0;
 
-        console.log("DOU:", douTotal, "DOESP:", doespTotal, "DOSP:", dospTotal, "DJB:", dojbTotal);
+        console.log("DOU:", douTotal, "DOESP:", doespTotal, "DOSP:", dospTotal);
 
         const houveErro =
-            !douTotal || !doespTotal || !dospTotal || !dojbTotal;
+            !douTotal || !doespTotal || !dospTotal;
         const houveExcedente =
             douTotal > douTotalEsperado ||
             doespTotal > doespTotalEsperado ||
-            dospTotal > dospTotalEsperado ||
-            dojbTotal > djbTotalEsperado;
+            dospTotal > dospTotalEsperado;
 
-        let resultado = { douTotal, doespTotal, dospTotal, dojbTotal, douTotalEsperado, doespTotalEsperado, dospTotalEsperado, djbTotalEsperado };
+        let resultado = { douTotal, doespTotal, dospTotal, douTotalEsperado, doespTotalEsperado, dospTotalEsperado };
 
         if (houveErro || houveExcedente) {
             console.log("Capturando screenshot...");
@@ -98,7 +96,7 @@ export const handler = async () => {
 
             if (houveExcedente) {
                 console.log("Salvando novos totais no DynamoDB...");
-                await salvarNovosValores({ dou: douTotal, doesp: doespTotal, dosp: dospTotal, djb: dojbTotal });
+                await salvarNovosValores({ dou: douTotal, doesp: doespTotal, dosp: dospTotal });
             }
 
             return {
@@ -136,7 +134,7 @@ function getMailTransporter() {
     return transporter;
 }
 
-async function sendEmail(screenshotBase64, { douTotal, doespTotal, dospTotal, dojbTotal, douTotalEsperado, doespTotalEsperado, dospTotalEsperado, djbTotalEsperado }, houveErro) {
+async function sendEmail(screenshotBase64, { douTotal, doespTotal, dospTotal, douTotalEsperado, doespTotalEsperado, dospTotalEsperado }, houveErro) {
     const transporter = getMailTransporter();
 
     const subject = houveErro
@@ -150,14 +148,12 @@ async function sendEmail(screenshotBase64, { douTotal, doespTotal, dospTotal, do
          <li>DOU: ${douTotal} ${douTotal > douTotalEsperado ? `(+${douTotal - douTotalEsperado})` : ''}</li>
          <li>DOESP: ${doespTotal} ${doespTotal > doespTotalEsperado ? `(+${doespTotal - doespTotalEsperado})` : ''}</li>
          <li>DOSP: ${dospTotal} ${dospTotal > dospTotalEsperado ? `(+${dospTotal - dospTotalEsperado})` : ''}</li>
-         <li>DOs Jusbrasil: ${dojbTotal} ${dojbTotal > djbTotalEsperado ? `(+${dojbTotal - djbTotalEsperado})` : ''}</li>
        </ul>`
         : `<p>Novos resultados foram detectados:</p>
        <ul>
          <li>DOU: ${douTotal} ${douTotal > douTotalEsperado ? `(+${douTotal - douTotalEsperado})` : ''}</li>
          <li>DOESP: ${doespTotal} ${doespTotal > doespTotalEsperado ? `(+${doespTotal - doespTotalEsperado})` : ''}</li>
          <li>DOSP: ${dospTotal} ${dospTotal > dospTotalEsperado ? `(+${dospTotal - dospTotalEsperado})` : ''}</li>
-         <li>DOs Jusbrasil: ${dojbTotal} ${dojbTotal > djbTotalEsperado ? `(+${dojbTotal - djbTotalEsperado})` : ''}</li>
        </ul>`;
 
     await transporter.sendMail({
@@ -201,26 +197,6 @@ ${error?.stack || error?.message || error}
     console.log("Email de erro enviado!");
 }
 
-function clicarEAguardarPopup(page, buttonSelector, diario) {
-    return new Promise((resolve, reject) => {
-        const onPopup = popup => {
-            clearTimeout(timeout);
-            resolve(popup);
-        };
-        const timeout = setTimeout(() => {
-            page.off("popup", onPopup);
-            reject(new Error(`A página de resultados do ${diario} não foi aberta`));
-        }, 90_000);
-
-        page.once("popup", onPopup);
-        page.click(buttonSelector).catch(error => {
-            clearTimeout(timeout);
-            page.off("popup", onPopup);
-            reject(error);
-        });
-    });
-}
-
 async function getValoresEsperados() {
     const resp = await client.send(new GetItemCommand({
         TableName: TABLE_NAME,
@@ -231,11 +207,10 @@ async function getValoresEsperados() {
         dou: parseInt(resp.Item.douTotal.N),
         doesp: parseInt(resp.Item.doespTotal.N),
         dosp: parseInt(resp.Item.dospTotal.N),
-        djb: parseInt(resp.Item.djbTotal?.N || "0"),
     };
 }
 
-async function salvarNovosValores({ dou, doesp, dosp, djb }) {
+async function salvarNovosValores({ dou, doesp, dosp }) {
     const item = {
         id: { S: "totais" },
         lastUpdated: { S: new Date().toISOString() }
@@ -244,7 +219,6 @@ async function salvarNovosValores({ dou, doesp, dosp, djb }) {
     if (dou) item.douTotal = { N: String(dou) };
     if (doesp) item.doespTotal = { N: String(doesp) };
     if (dosp) item.dospTotal = { N: String(dosp) };
-    if (djb !== undefined) item.djbTotal = { N: String(djb) };
 
     await client.send(new PutItemCommand({
         TableName: TABLE_NAME,
