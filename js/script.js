@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function consultar() {
-    consultarDOJB();
+    // consultarDOJB();
     consultarDOU();
     consultarDOESP();
     // consultarDOSP();
