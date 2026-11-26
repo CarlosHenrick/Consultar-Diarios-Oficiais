@@ -165,7 +165,7 @@ async function consultarDOU() {
         clearInterval(intervalId);
         document.getElementById("dou").innerHTML = `
             <a href="https://www.in.gov.br/consulta/-/buscar/dou?q=%22carlos+henrique+ara%C3%BAjo+alves%22&s=todos&exactDate=all&sortType=0" target="_blank">
-              <button id="btnBuscaDOSP"><span class="icon">➜]</span> Abrir resultado em nova guia</button>
+              <button id="btnBuscaDOU"><span class="icon">➜]</span> Abrir resultado em nova guia</button>
             </a>
         `;
     }
@@ -220,7 +220,7 @@ async function consultarDOESP() {
         clearInterval(intervalId);
         document.getElementById("doesp").innerHTML = `
             <a href="https://www.doe.sp.gov.br/busca-avancada" target="_blank">
-              <button id="btnBuscaDOSP"><span class="icon">➜]</span> Abrir resultado em nova guia</button>
+              <button id="btnBuscaDOESP"><span class="icon">➜]</span> Abrir resultado em nova guia</button>
             </a>
         `;
     }
