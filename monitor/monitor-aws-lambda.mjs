@@ -51,18 +51,28 @@ export const handler = async () => {
       await page.$eval("#doesp-total", el => el.textContent.match(/\d+/)?.[0] || "0")
     );
 
-    const iframeHandle = await page.$("#iframe1");
-    const frame = await iframeHandle?.contentFrame();
+    const dospPage = await new Promise((resolve, reject) => {
+      const onPopup = popup => {
+        clearTimeout(timeout);
+        resolve(popup);
+      };
+      const timeout = setTimeout(() => {
+        page.off("popup", onPopup);
+        reject(new Error("A página de resultados do DOSP não foi aberta"));
+      }, 90_000);
 
-    let dospTotal = 0;
-    if (frame) {
-      try {
-        const val = await frame.$eval(".nroResultados", el => el.textContent.trim());
-        dospTotal = parseInt(val) || 0;
-      } catch {
-        console.warn("⚠️ Não foi possível capturar nroResultados no iframe");
-      }
-    }
+      page.once("popup", onPopup);
+      page.click("#btnBuscaDOSP").catch(error => {
+        clearTimeout(timeout);
+        page.off("popup", onPopup);
+        reject(error);
+      });
+    });
+
+    await dospPage.waitForSelector(".nroResultados", { timeout: 90_000 });
+    const dospTotal = parseInt(
+      await dospPage.$eval(".nroResultados", el => el.textContent.trim())
+    ) || 0;
 
     console.log("DOU:", douTotal, "DOESP:", doespTotal, "DOSP:", dospTotal);
 
