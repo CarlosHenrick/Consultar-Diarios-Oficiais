@@ -21,8 +21,12 @@
             <hr>
             <div id="inner-box" class="inner-box">
                 <form id="formBuscaDOJB"
-                    action="https://www.jusbrasil.com.br/diarios/busca?o=data&p=1&q=%22Carlos+Henrique+Araujo+Alves%22"
+                    action="https://www.jusbrasil.com.br/diarios/busca"
                     method="GET" target="_blank" rel="noopener noreferrer">
+                    <input type="hidden" name="o" value="data">
+                    <input type="hidden" name="p" value="1">
+                    <input type="hidden" name="q" value="&quot;Carlos Henrique Araujo Alves&quot;">
+
                     <button type="submit" id="btnBuscaDOJB">Abrir resultado em nova guia</button>
                 </form>
             </div>
