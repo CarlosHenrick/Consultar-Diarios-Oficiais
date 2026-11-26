@@ -219,8 +219,9 @@ async function consultarDOESP() {
         console.error(e);
         clearInterval(intervalId);
         document.getElementById("doesp").innerHTML = `
-            <p>Erro na consulta.</p>
-            <p>Acesse diretamente no Diário Oficial do Estado de São Paulo: <a href="https://www.doe.sp.gov.br/busca-avancada" target="_blank">DOESP</a></p>
+            <a href="https://www.doe.sp.gov.br/busca-avancada" target="_blank">
+              <button id="btnBuscaDOSP"><span class="icon">➜]</span> Abrir resultado em nova guia</button>
+            </a>
         `;
     }
 }
