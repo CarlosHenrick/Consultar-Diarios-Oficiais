@@ -167,21 +167,9 @@ async function consultarDOU() {
             <a href="https://www.in.gov.br/consulta/-/buscar/dou?q=%22carlos+henrique+ara%C3%BAjo+alves%22&s=todos&exactDate=all&sortType=0" target="_blank">
               <button id="btnBuscaDOU"><span class="icon">➜]</span> Abrir resultado em nova guia</button>
             </a>
-            <form id="formBuscaDOUalternativo" action="https://pesquisa.in.gov.br/imprensa/core/consulta.action" method="POST"
-              target="_blank" rel="noopener noreferrer">
-              <input type="hidden" name="edicao.jornal_hidden" value="1,1000,1010,1020,515,521,522,531,535,536,523,532,2,2000,529,525,3,3000,3020,1040,526,530,600,601,602,603,604,605,606,607,608,609,610,611,612,613,614,615,616,617,618,619,620,621,622,623,624,625,626,627,628,629,630,631,632,633,634,635,636,637,638,639,640,641,642,643,644,645,646,647,648,649,650,651,652,653,654,655,656,657,658,659,660,661,662,663,664,665,666,667,668,669,670,671,672,673,674,675,676,677,701,702">
-              <input type="hidden" name="edicao.txtPesquisa" value="&quot;carlos henrique araújo alves&quot;">
-              <input type="hidden" name="__checkbox_edicao.jornal" value="1,1000,1010,1020,515,521,522,531,535,536,523,532,2,2000,529,525,3,3000,3020,1040,526,530,600,601,602,603,604,605,606,607,608,609,610,611,612,613,614,615,616,617,618,619,620,621,622,623,624,625,626,627,628,629,630,631,632,633,634,635,636,637,638,639,640,641,642,643,644,645,646,647,648,649,650,651,652,653,654,655,656,657,658,659,660,661,662,663,664,665,666,667,668,669,670,671,672,673,674,675,676,677,701,702">
-              <input type="hidden" name="__checkbox_edicao.jornal" value="1,1000,1010,1020,515,521,522,531,535,536,523,532,600,601,602,603,612,613,614,615,616,617,618,619,620,621,622,623,624,625,626,627,628,629,630,631,632,633,701">
-              <input type="hidden" name="__checkbox_edicao.jornal" value="2,2000,529,525,604,605,606,607,634,635,636,637,638,639,640,641,642,643,644,645,646,647,648,649,650,651,652,653,654,655,702">
-              <input type="hidden" name="__checkbox_edicao.jornal" value="3,3000,3020,1040,526,530,608,609,610,611,656,657,658,659,660,661,662,663,664,665,666,667,668,669,670,671,672,673,674,675,676,677">
-              <input type="hidden" name="edicao.fonetica" value="S">
-              <input type="hidden" name="edicao.dtInicio" value="01/01">
-              <input type="hidden" name="edicao.dtFim" value="31/12">
-              <input type="hidden" name="edicao.ano" value="${new Date().getFullYear()}">
-
-              <button type="submit" id="btnBuscaDOUalternativo"><span class="icon">➜]</span> Abrir resultado em nova guia (alternativo)</button>
-            </form>
+            <a href="https://pesquisa.in.gov.br/imprensa/core/start.action" target="_blank">
+              <button id="btnBuscaDOUalternativo"><span class="icon">➜]</span> Abrir resultado em nova guia (alternativo)</button>
+            </a>
         `;
     }
 }
