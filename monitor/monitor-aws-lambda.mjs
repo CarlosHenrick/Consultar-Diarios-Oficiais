@@ -18,7 +18,7 @@ export const handler = async () => {
         console.log("Iniciando Chromium...");
         browser = await puppeteer.launch({
             args: chromium.args,
-            defaultViewport: { width: 1366, height: 768 },
+            defaultViewport: { width: 1920, height: 1080 },
             executablePath: await chromium.executablePath(),
             headless: chromium.headless,
         });
