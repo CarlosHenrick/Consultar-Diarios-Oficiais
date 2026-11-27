@@ -87,7 +87,7 @@ export const handler = async () => {
 
         if (houveErro || houveExcedente) {
             console.log("Capturando screenshot...");
-            const screenshot = await page.screenshot({ encoding: "base64" });
+            const screenshot = await page.screenshot({ encoding: "base64", fullPage: true });
 
             await browser.close();
 
