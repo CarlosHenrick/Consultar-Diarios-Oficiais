@@ -1,8 +1,35 @@
 // script.js
 document.addEventListener("DOMContentLoaded", () => {
+    inicializarTema();
+    document.getElementById("current-year").textContent = new Date().getFullYear();
     consultar();
     // setInterval(consultar, 60000);
 });
+
+function inicializarTema() {
+    const temaSalvo = localStorage.getItem("preferencia-tema");
+    const temaInicial = temaSalvo === "light" || temaSalvo === "dark"
+        ? temaSalvo
+        : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+
+    aplicarTema(temaInicial);
+
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const proximoTema = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        localStorage.setItem("preferencia-tema", proximoTema);
+        aplicarTema(proximoTema);
+    });
+}
+
+function aplicarTema(tema) {
+    const temaEscuro = tema === "dark";
+    document.documentElement.dataset.theme = tema;
+    document.getElementById("theme-icon").textContent = temaEscuro ? "☀" : "☾";
+    document.getElementById("theme-label").textContent = temaEscuro ? "Modo claro" : "Modo escuro";
+    document.getElementById("theme-toggle").setAttribute("aria-label", temaEscuro ? "Ativar modo claro" : "Ativar modo escuro");
+    document.getElementById("theme-toggle").setAttribute("aria-pressed", String(temaEscuro));
+    document.querySelector('meta[name="theme-color"]').setAttribute("content", temaEscuro ? "#0c1220" : "#f3f6fb");
+}
 
 async function consultar() {
     // consultarDOJB();
@@ -123,6 +150,10 @@ async function consultarDOU() {
 
         const url = 'https://www.in.gov.br/consulta/-/buscar/dou?q=%22carlos+henrique+ara%C3%BAjo+alves%22&s=todos&exactDate=all&sortType=0';
         const res = await fetch(url);
+        if (!res.ok) {
+            throw new Error(`A consulta ao DOU respondeu com HTTP ${res.status}`);
+        }
+
         const html = await res.text();
 
         const parser = new DOMParser();
@@ -132,21 +163,18 @@ async function consultarDOU() {
 
         const scriptTag = doc.querySelector("#_br_com_seatecnologia_in_buscadou_BuscaDouPortlet_params");
         if (!scriptTag) {
-            boxBtn.style.display = "inline-block";
-            box.innerHTML = html;
-            // box.innerHTML = "<p>Não foi possível encontrar resultados.</p>";
-            return;
+            throw new Error("A resposta do DOU não contém os dados de resultados esperados");
         }
 
         const data = JSON.parse(scriptTag.textContent);
         const resultados = data.jsonArray || [];
 
         if (resultados.length === 0) {
-            boxBtn.style.display = "inline-block";
+            boxBtn.style.display = "grid";
             box.innerHTML = "<p>Nenhum resultado encontrado.</p>";
         } else {
             boxTotal.innerHTML = `(${resultados.length} resultados)`;
-            boxBtn.style.display = "inline-block";
+            boxBtn.style.display = "grid";
             box.innerHTML = "";
             resultados.forEach(item => {
                 box.innerHTML += `
@@ -163,15 +191,26 @@ async function consultarDOU() {
     } catch (e) {
         console.error(e);
         clearInterval(intervalId);
-        document.getElementById("dou").innerHTML = `
-            <a href="https://www.in.gov.br/consulta/-/buscar/dou?q=%22carlos+henrique+ara%C3%BAjo+alves%22&s=todos&exactDate=all&sortType=0" target="_blank">
-              <button id="btnBuscaDOU"><span class="icon">➜]</span> Abrir resultado em nova guia</button>
-            </a>
-            <a href="https://pesquisa.in.gov.br/imprensa/core/start.action" target="_blank">
-              <button id="btnBuscaDOUalternativo"><span class="icon">➜]</span> Abrir resultado em nova guia (alternativo)</button>
-            </a>
-        `;
+        mostrarAlternativasDOU(
+            document.getElementById("dou"),
+            document.getElementById("dou-btn")
+        );
     }
+}
+
+function mostrarAlternativasDOU(box, refreshButton) {
+    refreshButton.style.display = "grid";
+    box.innerHTML = `
+        <p class="error-message" role="status">Não foi possível consultar automaticamente. Tente abrir a busca:</p>
+        <div class="fallback-actions">
+            <a id="btnBuscaDOU" href="https://www.in.gov.br/consulta/-/buscar/dou?q=%22carlos+henrique+ara%C3%BAjo+alves%22&s=todos&exactDate=all&sortType=0" target="_blank" rel="noopener noreferrer">
+                <span class="icon" aria-hidden="true">↗</span> Abrir resultado no DOU
+            </a>
+            <a id="btnBuscaDOUalternativo" href="https://pesquisa.in.gov.br/imprensa/core/start.action" target="_blank" rel="noopener noreferrer">
+                <span class="icon" aria-hidden="true">↗</span> Abrir busca alternativa
+            </a>
+        </div>
+    `;
 }
 
 async function consultarDOESP() {

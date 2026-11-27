@@ -3,69 +3,143 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="theme-color" content="#000000">
-    <title>Consultar Nome nos Diários Oficiais</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4f7fb">
+    <meta name="color-scheme" content="light dark">
+    <title>Consultar Diários Oficiais</title>
     <link rel="icon" href="/favicon.ico">
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <h1>Consultar Nome nos Diários Oficiais</h1>
+    <div class="site-shell">
+        <header class="site-header">
+            <a class="brand" href="/" aria-label="Diários Oficiais, página inicial">
+                <span class="brand-mark" aria-hidden="true">DO</span>
+                <span class="brand-copy">
+                    <strong>Diários Oficiais</strong>
+                    <small>Central de consultas</small>
+                </span>
+            </a>
 
-    <div class="results">
-        <div class="box">
-            <h2>
-                DOs Jusbrasil
-            </h2>
-            <hr>
-            <div id="inner-box" class="inner-box">
-                <form id="formBuscaDOJB" action="https://www.jusbrasil.com.br/diarios/busca" method="GET"
-                    target="_blank" rel="noopener noreferrer">
-                    <input type="hidden" name="o" value="data">
-                    <input type="hidden" name="p" value="1">
-                    <input type="hidden" name="q" value="&quot;Carlos Henrique Araujo Alves&quot;">
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Ativar modo escuro"
+                aria-pressed="false">
+                <span id="theme-icon" aria-hidden="true">☾</span>
+                <span id="theme-label">Modo escuro</span>
+            </button>
+        </header>
 
-                    <button type="submit" id="btnBuscaDOJB"><span class="icon">➜]</span> Abrir resultado em nova guia</button>
-                </form>
-            </div>
-        </div>
-        <div class="box">
-            <h2>
-                DOU <small id="dou-total"></small>
-                <button id="dou-btn" class="refresh-btn" onclick="consultarDOU()" title="Recarregar">↻</button>
-            </h2>
-            <hr>
-            <div id="dou"></div>
-        </div>
-        <div class="box">
-            <h2>
-                DOESP <small id="doesp-total"></small>
-                <button id="doesp-btn" class="refresh-btn" onclick="consultarDOESP()" title="Recarregar">↻</button>
-            </h2>
-            <hr>
-            <div id="doesp"></div>
-        </div>
-        <div class="box">
-            <h2>
-                DOSP
-            </h2>
-            <hr>
-            <div id="inner-box" class="inner-box">
-                <form id="formBuscaDOSP"
-                    action="https://diariooficial.prefeitura.sp.gov.br/md_epubli_controlador.php?acao=materias_pesquisar"
-                    method="POST" target="_blank" rel="noopener noreferrer">
-                    <input type="hidden" name="hdnTermoPesquisa" value="carlos henrique araujo alves">
-                    <input type="hidden" name="hdnTipoPesquisa" value="E">
-                    <input type="hidden" name="hdnVersaoDiario" value="A">
-                    <input type="hidden" name="hdnInicio" value="0">
-                    <input type="hidden" name="hdnVisualizacao" value="S">
-                    <input type="hidden" name="hdnModoPesquisa" value="RAPIDA">
+        <main>
+            <section class="hero" aria-labelledby="page-title">
+                <div class="hero-copy">
+                    <span class="eyebrow">ACOMPANHAMENTO DE PUBLICAÇÕES</span>
+                    <h1 id="page-title">Encontre publicações oficiais</h1>
+                    <p>Consulte diferentes diários oficiais em um só lugar.</p>
+                </div>
+                <div class="search-summary">
+                    <span class="summary-label">TERMO MONITORADO</span>
+                    <strong>“Carlos Henrique Araujo Alves”</strong>
+                </div>
+            </section>
 
-                    <button type="submit" id="btnBuscaDOSP"><span class="icon">➜]</span> Abrir resultado em nova guia</button>
-                </form>
-            </div>
-        </div>
+            <section class="section-heading" aria-label="Fontes disponíveis">
+                <div>
+                    <h2>Fontes de consulta</h2>
+                    <p>Escolha uma fonte para ver as publicações encontradas.</p>
+                </div>
+                <span class="source-count"><span aria-hidden="true">●</span> 4 fontes</span>
+            </section>
+
+            <section class="results" aria-label="Diários oficiais">
+                <article class="box">
+                    <header class="box-heading">
+                        <span class="source-icon source-jus" aria-hidden="true">JB</span>
+                        <div class="source-title">
+                            <h3>Jusbrasil</h3>
+                            <p>Diários oficiais</p>
+                        </div>
+                    </header>
+                    <hr>
+                    <div class="inner-box">
+                        <p class="card-description">Pesquise publicações reunidas pelo Jusbrasil.</p>
+                        <form id="formBuscaDOJB" action="https://www.jusbrasil.com.br/diarios/busca" method="GET"
+                            target="_blank" rel="noopener noreferrer">
+                            <input type="hidden" name="o" value="data">
+                            <input type="hidden" name="p" value="1">
+                            <input type="hidden" name="q" value="&quot;Carlos Henrique Araujo Alves&quot;">
+                            <button type="submit" id="btnBuscaDOJB" class="primary-button">
+                                <span class="icon" aria-hidden="true">↗</span> Abrir resultados
+                            </button>
+                        </form>
+                    </div>
+                </article>
+
+                <article class="box">
+                    <header class="box-heading">
+                        <span class="source-icon source-dou" aria-hidden="true">BR</span>
+                        <div class="source-title">
+                            <h3>Diário Oficial da União</h3>
+                            <p>DOU <small id="dou-total" class="result-total"></small></p>
+                        </div>
+                        <button id="dou-btn" class="refresh-btn" type="button" onclick="consultarDOU()"
+                            title="Recarregar DOU" aria-label="Recarregar DOU">↻</button>
+                    </header>
+                    <hr>
+                    <div id="dou" class="source-results" aria-live="polite">
+                        <p class="loading">Carregando publicações…</p>
+                    </div>
+                </article>
+
+                <article class="box">
+                    <header class="box-heading">
+                        <span class="source-icon source-doesp" aria-hidden="true">SP</span>
+                        <div class="source-title">
+                            <h3>Diário Oficial do Estado de São Paulo</h3>
+                            <p>DOESP <small id="doesp-total" class="result-total"></small></p>
+                        </div>
+                        <button id="doesp-btn" class="refresh-btn" type="button" onclick="consultarDOESP()"
+                            title="Recarregar DOESP" aria-label="Recarregar DOESP">↻</button>
+                    </header>
+                    <hr>
+                    <div id="doesp" class="source-results" aria-live="polite">
+                        <p class="loading">Carregando publicações…</p>
+                    </div>
+                </article>
+
+                <article class="box">
+                    <header class="box-heading">
+                        <span class="source-icon source-dosp" aria-hidden="true">SP</span>
+                        <div class="source-title">
+                            <h3>Diário Oficial da Cidade de São Paulo</h3>
+                            <p>DOSP</p>
+                        </div>
+                    </header>
+                    <hr>
+                    <div class="inner-box">
+                        <p class="card-description">Acesse a busca no diário oficial da capital.</p>
+                        <form id="formBuscaDOSP"
+                            action="https://diariooficial.prefeitura.sp.gov.br/md_epubli_controlador.php?acao=materias_pesquisar"
+                            method="POST" target="_blank" rel="noopener noreferrer">
+                            <input type="hidden" name="hdnTermoPesquisa" value="carlos henrique araujo alves">
+                            <input type="hidden" name="hdnTipoPesquisa" value="E">
+                            <input type="hidden" name="hdnVersaoDiario" value="A">
+                            <input type="hidden" name="hdnInicio" value="0">
+                            <input type="hidden" name="hdnVisualizacao" value="S">
+                            <input type="hidden" name="hdnModoPesquisa" value="RAPIDA">
+                            <button type="submit" id="btnBuscaDOSP" class="primary-button">
+                                <span class="icon" aria-hidden="true">↗</span> Abrir resultados
+                            </button>
+                        </form>
+                    </div>
+                </article>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <span>As consultas são realizadas nas fontes oficiais e nos serviços indicados.</span>
+            <span>Diários Oficiais <span aria-hidden="true">·</span> <span id="current-year"></span></span>
+        </footer>
     </div>
 
     <script src="js/script.js"></script>
