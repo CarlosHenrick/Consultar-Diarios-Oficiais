@@ -479,7 +479,8 @@ hr {
 }
 
 .fallback-actions #btnBuscaDOU,
-.fallback-actions #btnBuscaDOUalternativo {
+.fallback-actions #btnBuscaDOUalternativo,
+.fallback-actions #btnBuscaDOESP {
     margin-top: 0;
 }
 

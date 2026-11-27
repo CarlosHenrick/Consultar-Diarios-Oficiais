@@ -234,16 +234,20 @@ async function consultarDOESP() {
         const toDate = formatDate(new Date());
         const url = `https://do-api-web-search.doe.sp.gov.br/v2/advanced-search/publications?periodStartingDate=personalized&PageNumber=1&Terms%5B0%5D=carlos%20henrique%20ara%C3%BAjo%20alves&Terms%5B1%5D=carlos%20henrique%20araujo%20alves&FromDate=${fromDate}&ToDate=${toDate}&PageSize=10000&SortField=Date`;
         const res = await fetch(url);
+        if (!res.ok) {
+            throw new Error(`A consulta ao DOESP respondeu com HTTP ${res.status}`);
+        }
+
         const data = await res.json();
 
         clearInterval(intervalId);
 
         if (data.items.length === 0) {
-            boxBtn.style.display = "inline-block";
+            boxBtn.style.display = "grid";
             box.innerHTML = "<p>Nenhum resultado encontrado.</p>";
         } else {
             boxTotal.innerHTML = `(${data.items.length} resultados)`;
-            boxBtn.style.display = "inline-block";
+            boxBtn.style.display = "grid";
             box.innerHTML = "";
             const resultados = data.items.sort((a, b) => new Date(b.date) - new Date(a.date));
             resultados.forEach(item => {
@@ -260,12 +264,23 @@ async function consultarDOESP() {
     } catch (e) {
         console.error(e);
         clearInterval(intervalId);
-        document.getElementById("doesp").innerHTML = `
-            <a href="https://www.doe.sp.gov.br/busca-avancada" target="_blank">
-              <button id="btnBuscaDOESP"><span class="icon">➜]</span> Abrir resultado em nova guia</button>
-            </a>
-        `;
+        mostrarAlternativasDOESP(
+            document.getElementById("doesp"),
+            document.getElementById("doesp-btn")
+        );
     }
+}
+
+function mostrarAlternativasDOESP(box, refreshButton) {
+    refreshButton.style.display = "grid";
+    box.innerHTML = `
+        <p class="error-message" role="status">Não foi possível consultar automaticamente. Acesse a página oficial:</p>
+        <div class="fallback-actions">
+            <a id="btnBuscaDOESP" href="https://www.doe.sp.gov.br/busca-avancada" target="_blank" rel="noopener noreferrer">
+                <span class="icon" aria-hidden="true">↗</span> Abrir busca oficial do DOESP
+            </a>
+        </div>
+    `;
 }
 
 async function consultarDOSP() {
